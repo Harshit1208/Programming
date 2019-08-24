@@ -1,5 +1,5 @@
 /**
- * @description : to print two dimensional array
+ * @description : to print two dimensional array from input 
  * @since : 08/21/2019
  * @author : Harshit Sethi
  */

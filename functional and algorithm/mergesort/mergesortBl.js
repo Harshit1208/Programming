@@ -1,7 +1,9 @@
-var test=[15,34,78,18,36,20,43,45]
+/**
+ * * @description : The function takes the user input and applies merge sort algorithm.
+ * @param {params} test: array entered by user 
+ */
 var mergeSort=(test)=>{
 
-try{
 
     var n=test.length;
     if(n<2){
@@ -20,8 +22,14 @@ try{
     mergeSort(left);
     mergeSort(right);
     merge(left,right,test);
-
-
+   
+}
+/**
+ * 
+ * @param {params} left : one half of array
+ * @param {params} right : other half of array
+ * @param {params} test 
+ */
  var merge=(left,right,test)=>{
      var nl=left.length;
      var rl=right.length;
@@ -50,12 +58,7 @@ try{
         k++;
     }
     console.log(test);
-}
-}
-catch(error)
-{
-console.log("error");
-}
  }
- mergeSort(test);
-	
+ 
+
+ module.exports={mergeSort};

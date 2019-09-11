@@ -1,0 +1,6 @@
+{
+  "inventory":[ 
+  {"Inventorydetail":"Rice" , "Weight":20 , "Price":40},
+  {"Inventorydetail":"Pulses" , "Weight":"40" , "Price":"80"},
+  {"Inventorydetail":"Wheat" , "Weight":"50" , "Price":"100"}
+  ]}

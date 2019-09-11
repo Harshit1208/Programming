@@ -5,9 +5,7 @@
  */
 var Mortgage = function(name) {
     this.name = name;
-// }
- 
-// Mortgage.prototype = {
+
  
     applyFor = (amount)=> {
         // access multiple subsystems...

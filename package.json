@@ -1,0 +1,28 @@
+{
+  "name": "harshit-sethi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "chai": "^4.2.0",
+    "express": "^4.17.1",
+    "mocha": "^6.2.0",
+    "nodemon": "^1.19.2",
+    "readline-sync": "^1.4.10"
+  },
+  "test": "test",
+  "devDependencies": {},
+  "scripts": {
+    "test": "mocha || true"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Harshit1208/Programming.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Harshit1208/Programming/issues"
+  },
+  "homepage": "https://github.com/Harshit1208/Programming#readme"
+}

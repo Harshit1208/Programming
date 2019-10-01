@@ -8,7 +8,7 @@ const port = process.env.PORT || 3000;
  * @param {token} : token which will help user to reset password
  * @param {callback} : Callback function to reset password
  */ 
-exports.sendMail = (token,body,callback) => {
+exports.sendMail = (defaultpass,body,callback) => {
     var transporter = mailer.createTransport({
         host: 'smtp.gmail.com',
         port: 465,
@@ -24,7 +24,7 @@ exports.sendMail = (token,body,callback) => {
         from: process.env.EMAIL,
         to: body.email,
         subject: 'testing node-mailer',
-        text: "http://localhost:" + port + "/resetPassword/" + token,
+        text: "Your default password is generated. You can change it later, password is = "+ defaultpass,
         html:""
     }
 

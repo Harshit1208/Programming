@@ -21,10 +21,9 @@ exports.getAllData = (req, res) => {
 
             res.status(404).send(response);
         } else {
-            response.state = true;
+            response.status = true;
             response.data = data;
-
-            res.status(200).send(response);
+            res.status(200).send(response)
         }
     });
 
@@ -81,10 +80,10 @@ exports.logIn = (req, res) => {
         if (err.isEmpty()) {
             userServices.logIn(req.body, (err, data) => {
                 if (!err) {
-                    response.state = true;
+                    //response.state = true;
                     response.data = data;
 
-                    res.status(200).send(response);
+                    res.status(200).send(data);
                 } else {
                     response.state = false;
                     response.error = err;
@@ -157,6 +156,46 @@ exports.forgotPassword = (req, res) => {
             response.state = false;
             response.error = err;
             res.status(500).send(response);
+        }
+    });
+}
+
+exports.chatConversation = (chatData,callback) => {
+
+    var response={};
+    userServices.chatConversation(chatData, (err, data) => {
+        if (err) {
+            response.error = "Some error occured ";
+            response.status = false;
+            //res.send(response);
+            callback(response)
+        }
+        else {
+            response.message = data;
+            response.status = true;
+            //res.send(response);
+            // return response;
+            callback(null,response)
+        }
+
+    })
+}
+
+exports.fetchConversation=(req,res)=>{
+    var response={}
+    userServices.fetchConversation(req.body,(err,data)=>{
+        if (err) {
+            response.error = [{message:err}];
+            response.status = false;
+            //res.send(response);
+            res.status(404).send(response);
+        }
+        else {
+            response.message = data;
+            response.status = true;
+            //res.send(response);
+            // return response;
+            res.status(200).send(response);
         }
     });
 }

@@ -3,9 +3,18 @@
 */
 
 const userModel = require("../app/models/userModel");
+const chatModel = require('../app/models/chatModel')
 const bcrypt = require("bcryptjs");
 const tokenFactory = require("../Middleware/token");
 const mailerFactory = require("../Middleware/mail");
+
+var rn = require('random-number');
+var gen = rn.generator({
+  min:  1000
+, max:  9999
+, integer: true
+})
+
 
 require("dotenv").config();
 
@@ -121,20 +130,71 @@ exports.resetPassword = async (req, callback) => {
  * @param {callback} : Callback function
  */
 exports.forgotPassword = (body, callback) => {
-    userModel.findOne({ email: body.email }, (err, user) => {
+    userModel.findOne({ email: body.email }, async (err, user) => {
         if (err) callback(err);
         if (!user) {
             callback("User Not Found");
         } else {
             // Send Mail to User with a token
-            var token = tokenFactory.generateToken(user);
-            mailerFactory.sendMail(token, body, (err, data) => {
+            // var token = tokenFactory.generateToken(user);
+            var defaultpass = ((user.name).toString())+gen();
+            mailerFactory.sendMail(defaultpass, body, (err, data) => {
                 if (err) {
-                    console.log("here3")
 
                     callback(err);
                 } else callback(null, data);
             });
+            userModel.findOneAndUpdate({ email: body.email },
+                { $set: { password : await generatePassword(defaultpass)} },
+                (err, doc) => {
+                    if (err) callback(err);
+                    else callback(null, doc);
+                });
         }
     });
+    
+}
+
+exports.chatConversation = (chatData, callback) => {
+    var fromTO = {
+        $or: [{ sender: chatData.sender, receiver: chatData.receiver },
+        { sender: chatData.receiver, receiver: chatData.sender }
+        ]
+    };
+    chatModel.findOne(fromTO)
+        .then((data) => {
+
+            let tempMessages = data.conversations;
+            tempMessages.push({ sender: chatData.sender, message: chatData.message });
+            chatModel.findOneAndUpdate(fromTO, { $set: { conversations: tempMessages } }, { new: true })
+                .then((result) => {
+                    callback(null, result)
+                }).catch((err) => {
+                    callback("could not update your messages")
+                })
+        }).catch(() => {
+            var chat = new chatModel({ sender: chatData.sender, receiver: chatData.receiver, conversations: [{ sender: chatData.sender, message: chatData.message }] });
+            chat.save();
+            callback(null, chat);
+
+        })
+}
+
+exports.fetchConversation = (body, callback) => {
+    var fromTO = {
+        $or: [{ sender: body.sender, receiver: body.receiver },
+        { sender: body.receiver, receiver: body.sender }
+        ]
+    };
+    chatModel.findOne(fromTO)
+        .then((data) => {
+            if (data) {
+                callback(null, data)
+            }
+            else {
+                callback("NO messages to show")
+            }
+        }).catch((err) => {
+            callback("NO Messages to show " + err);
+        })
 }
